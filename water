@@ -1,0 +1,43 @@
+#define BLYNK_TEMPLATE_ID "TMPL3qSql3JLZ"
+#define BLYNK_TEMPLATE_NAME "Pipe line system"
+#define BLYNK_AUTH_TOKEN "MLkhdpEf9EzSXHYfBhWKtlI-RyAEIsD3"
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+char ssid[] = "user"; // your WiFi name
+char pass[] = "12345678"; // your WiFi password
+#define SENSOR_COUNT 4
+#define LED_PIN 2
+#define LEAK_VPIN V9
+#define LEAK_LABEL_VPIN V10
+struct Sensor {
+ const char* name;
+ uint8_t pin;
+ volatile unsigned long pulseCount;
+ float totalLitres;
+ float flowRate;
+ int vPinFlow;
+ int vPinTotal;
+ }; 
+// Assign sensor pins and Blynk virtual pins
+Sensor sensors[SENSOR_COUNT] = {
+ {"Ward 1", 4, 0, 0.0, 0.0, V1, V2},
+ {"Ward 2", 5, 0, 0.0, 0.0, V3, V4},
+ {"Ward 3", 12, 0, 0.0, 0.0, V5, V6},
+ {"Ward 4", 13, 0, 0.0, 0.0, V7, V8}
+};
+const float pulsesPerLiter = 450.0;
+unsigned long lastMillis = 0;
+const unsigned long intervalMs = 1000;
+void IRAM_ATTR pulseISR0() { sensors[0].pulseCount++; }
+void IRAM_ATTR pulseISR1() { sensors[1].pulseCount++; }
+void IRAM_ATTR pulseISR2() { sensors[2].pulseCount++; }
+void IRAM_ATTR pulseISR3() { sensors[3].pulseCount++; }
+BlynkTimer timer;
+void setup() {
+ Serial.begin(115200);
+ Serial.println("\nNodeMCU starting...");
+ for (int i = 0; i < SENSOR_COUNT; i++) pinMode(sensors[i].pin, INPUT_PULLUP);
+ attachInterrupt(digitalPinToInterrupt(sensors[0].pin), pulseISR0, FALLING);
+attachInterrupt(digitalPinToInterrupt(sensors[1].pin), pulseISR1, FALLING);
+ attachInterrupt(digitalPinToInterrupt(sensors[2].pin), pulseISR2, FALLING);
