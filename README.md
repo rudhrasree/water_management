@@ -1,4 +1,3 @@
-@"
 # 💧 Next-Gen Water Management System using IoT
 
 An IoT-based smart water pipeline monitoring system built using **NodeMCU (ESP8266)** and **Blynk Cloud**.  
