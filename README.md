@@ -103,14 +103,3 @@ Total Litres = Pulses / 450
 ## 👩‍💻 Developed By
 
 Rudhrasree  
-
----
-
-## 📜 License
-
-MIT License
-"@ | Set-Content README.md
-
-git add README.md
-git commit -m "Add professional project README"
-git push
